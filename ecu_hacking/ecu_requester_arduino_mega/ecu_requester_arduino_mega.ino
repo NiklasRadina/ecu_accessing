@@ -8,8 +8,15 @@ void setup() {
   Serial3.begin(1953);
 }
 
+void print_message(unsigned char *message){
+  for(char i=0; i<4; i++){
+    Serial.print(*(message + i), HEX);
+  }
+  Serial.println();
+}
+
 void loop() {
-  got_message = false;
+  got_message = false; 
   delay(100);
   char len = Serial.available();
   if (len > 0){
