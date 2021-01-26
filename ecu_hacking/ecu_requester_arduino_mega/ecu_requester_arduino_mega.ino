@@ -1,11 +1,11 @@
-unsigned char message_car[4];
+unsigned char message_car[4] ;
 unsigned char response_car[4];
 unsigned char stop_car[4] = {0x12, 0, 0, 0};
 bool got_message = true;
 
 void setup() {
   Serial.begin(9600);
-  Serial3.begin(1953);
+  Serial3.begin(1953, SERIAL_8E1);
 }
 
 void print_message(unsigned char *message){
@@ -16,7 +16,7 @@ void print_message(unsigned char *message){
 }
 
 void loop() {
-  got_message = false; 
+  got_message = false;
   delay(100);
   char len = Serial.available();
   if (len > 0){
@@ -49,18 +49,25 @@ void loop() {
         got_message = true;
       }
     }
+    free(input);
   }
+  
   if(got_message){
     Serial3.write(message_car, 4);
+    Serial.println("message sent: ");
+    print_message(message_car);
 //    delay(100);
 //    Serial3.write(stop_car, 4);
   }
   if(Serial3.available() > 0){
-//    Serial3.readBytes(response_car, 4);
-//    for(unsigned char i = 0; i < 4; i++){
-//      Serial.print(response_car[i], HEX);
-//    }
-    Serial.println(Serial3.read());
+    Serial3.readBytes(response_car, 4);
+    Serial.println("response: ");
+    for(unsigned char i = 0; i < 4; i++){
+      Serial.print(response_car[i], HEX);
+    }
+    Serial.println();
+//    Serial.println(Serial3.read());
+
   }
 
 }
